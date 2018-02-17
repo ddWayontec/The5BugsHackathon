@@ -1,4 +1,4 @@
-#define MAX_PHONE_NUMBER    14
+#define MAX_PHONE_NUMBER 14
 #define CTRL_Z 0x1A
 #define TIMEOUT 10000
 
@@ -65,11 +65,10 @@ void loop() {
     Serial.println();
     Serial.println();
 
-    char szMessage[64];
+    char szMessage[32] = "Particle Electron Test Message!";
 
-	szMessage = "Particle Electron Test Message!";
 
 	sendMessage(szMessage);
 
-    delay(1000);
+    delay(20000);
 }

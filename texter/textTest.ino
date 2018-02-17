@@ -1,6 +1,7 @@
 #define MAX_PHONE_NUMBER 14
 #define CTRL_Z 0x1A
 #define TIMEOUT 10000
+#include "cellular_hal.h"
 
 unsigned char id;
 boolean gain;     // Gain setting, 0 = X1, 1 = X16;
@@ -54,6 +55,8 @@ int sendMessage(char* pMessage){
 
     return retVal;
 }
+
+STARTUP(cellular_credentials_set("isp.telus.com", "", "", NULL));
 
 void setup() {
     Serial.begin(115200);

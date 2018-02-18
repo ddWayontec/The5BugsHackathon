@@ -151,6 +151,9 @@ void loop()
 
     char szMessage[64] = "Motion Detected!"; //sets the message to be sent to the customer
     sendMessage(szMessage); // sends message to the cell phone number on file
+
+//    Serial.println(Time.format(TIME_FORMAT_ISO8601_FULL));
+
     delay(5000); //delay needed so that the Particle.io account deos not get "spammed" by this firmware. Can be set lower if customer needs more datapoints, but custower should then contact Particle Cloud to inform them of the higher rate requirement on their account.
   }
   else

@@ -84,7 +84,7 @@ void loop()
   }
     delay(1000);
 
-    R0 = MQCalibration();
+    float R0 = MQCalibration();
     printGasValues(R0);
 
 

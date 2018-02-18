@@ -1,3 +1,8 @@
+#include "cellular_hal.h"
+
+// TELUS APN
+STARTUP(cellular_credentials_set("isp.telus.com", "", "", NULL));
+
 int led = D7; // we will use D7 LED to monitor sensor activity
 int pir = D0; //connect the PIR output to pin D0 of the Electron
 

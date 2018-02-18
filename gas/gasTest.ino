@@ -1,3 +1,8 @@
+#include "cellular_hal.h"
+
+// TELUS APN
+STARTUP(cellular_credentials_set("isp.telus.com", "", "", NULL));
+
 void setup() {
   Serial.begin(115200);
 }

@@ -66,11 +66,11 @@ int sendMessage(char* pMessage) //for sending sms text message to cell phone
 
     if(RESP_OK == retVal)
     {
-        Serial.println("+OK, Message Sent!");
+        Serial.println("+OK, SMS text sent!");
     }
     else
     {
-        Serial.println("+ERROR, error sending message.");
+        Serial.println("+ERROR, error sending SMS text.");
     }
     return retVal;
 }

@@ -14,7 +14,8 @@ char szPhoneNumber2[MAX_PHONE_NUMBER2] = "16044010082";
 int lowerLimit = 10;
 boolean smsSend = false;
 
-int callback(int type, const char* buf, int len, char* param){
+int callback(int type, const char* buf, int len, char* param)
+{
     Serial.print("Return: ");
     Serial.write((const uint8_t*)buf, len);
     Serial.println();
@@ -22,13 +23,15 @@ int callback(int type, const char* buf, int len, char* param){
     return WAIT;
 }
 
-int setLowerLimit(String args){
+int setLowerLimit(String args)
+{
     lowerLimit = args.toInt();
 
     return lowerLimit;
 }
 
-int sendMessage(char* pMessage){
+int sendMessage(char* pMessage)
+{
     char szCmd[64];
 
     sprintf(szCmd, "AT+CMGS=\"+%s\",145\r\n", szPhoneNumber1);
@@ -60,7 +63,8 @@ int sendMessage(char* pMessage){
 
 STARTUP(cellular_credentials_set("isp.telus.com", "", "", NULL));
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
     Spark.function("setmin", setLowerLimit);
 }

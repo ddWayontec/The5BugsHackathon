@@ -8,10 +8,10 @@ STARTUP(cellular_credentials_set("isp.telus.com", "", "", NULL));
 #define R0_CLEAN_AIR_FACTOR 9.83      // standard air/RO
 
 #define CALIBRATION_TIMES 50            // number of samples when calibrating
-#define CALIBRATION_INTERVAL 500      // time interval (milliseconds) between each sample
+#define CALIBRATION_INTERVAL 400        // time interval (milliseconds) between each sample
 
-#define READ_INTERVAL 50              // number of samples in a normal run
-#define READ_TIMES 10                   // time interval (milliseconds) between each sample
+#define READ_INTERVAL 50                // number of samples in a normal run
+#define READ_TIMES 5                    // time interval (milliseconds) between each sample
 
 #define LPG_GAS 0
 #define CO_GAS 1

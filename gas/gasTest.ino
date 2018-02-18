@@ -42,20 +42,17 @@ void loop() {
 
     Serial.print("calibration done RO =")
     Serial.print(RO);
-    
+
     Serial.print("LPG:");
     Serial.print(getGasPercentage(MQRead()/R0, LPG_GAS) );
-    Serial.print( "ppm" );
-    Serial.print("    ");
+    Serial.println( "ppm" );
     Serial.print("CO:");
     Serial.print(getGasPercentage(MQRead()/R0, CO_GAS) );
-    Serial.print( "ppm" );
-    Serial.print("    ");
+    Serial.println( "ppm" );
     Serial.print("SMOKE:");
     Serial.print(getGasPercentage(MQRead()/R0, SMOKE_GAS) );
-    Serial.print( "ppm" );
-    Serial.print("\n");
-    delay(200);
+    Serial.println( "ppm" );
+    delay(300);
 
 
 }

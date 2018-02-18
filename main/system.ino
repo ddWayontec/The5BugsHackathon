@@ -78,23 +78,25 @@ void setup()
     Serial.begin(115200);
     Particle.function("setmin", setLowerLimit);
     setMotionOff();
+    setMotionOn(); // ONLY FOR TESTING, DELETE WHEN APP IMPLEMENTED
 }
 
 void loop() {
 
   if (digitalRead(readPin) == HIGH)
   {
-      char szMessage[64] = "Particle Electron Detected Motion!";
+      //char szMessage[64] = "Particle Electron Detected Motion!";
+      Serial.println("MOTION DETECT");
 
 
     Serial.println();
     Serial.println();
 
-	  sendMessage(szMessage);
+	//  sendMessage(szMessage);
   }
   else
   {
-
+    Serial.println("No motion");
   }
-    delay(10000);
+    delay(1000);
 }

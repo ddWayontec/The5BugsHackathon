@@ -1,7 +1,28 @@
+#include "math.h"
+#include "cellular_hal.h"
+
 #define MAX_PHONE_NUMBER 14
 #define CTRL_Z 0x1A
 #define TIMEOUT 10000
-#include "cellular_hal.h"
+
+#define RL_VALUE 5                    // load on the rensor
+#define R0_CLEAN_AIR_FACTOR 9.83      // standard air/RO
+
+#define CALIBRATION_TIMES 50            // number of samples when calibrating
+#define CALIBRATION_INTERVAL 400        // time interval (milliseconds) between each sample
+
+#define READ_INTERVAL 50                // number of samples in a normal run
+#define READ_TIMES 5                    // time interval (milliseconds) between each sample
+
+#define LPG_GAS 0
+#define CO_GAS 1
+#define SMOKE_GAS 2
+
+float LPGCurve[3] = {2.3, 0.21, -0.47};
+float COCurve[3] = {2.3, 0.72, -0.34};
+float SmokeCurve[3] = {2.3, 0.53, -0.44};
+
+float R0 = 10;
 
 unsigned char id;
 boolean gain;     // Gain setting, 0 = X1, 1 = X16;

@@ -17,7 +17,7 @@ void loop() {
     sensorValue = sensorValue/100.0;
     sensor_volt = (float)sensorVal/1024*5.0;
     RS_air = (5.0-sensor_volt)/sensor_volt;
-    R0 = RS_air/R0                         // ratio is always 10 in clear air
+    R0 = RS_air/10                         // ratio is always 10 in clear air
 
 
     Serial.print("Sensor value= ")

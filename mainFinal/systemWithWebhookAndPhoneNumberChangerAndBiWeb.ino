@@ -267,7 +267,6 @@ int getGasPercentage(float rs_ro_ratio, int gas_id)
     return 1;                 // the 1 is just to see if this effects anything
 }
 
-
 int MQGetPercentage(float rs_ro_ratio, float *pcurve)
 {
     return (pow(10,( ((log(rs_ro_ratio)-pcurve[1])/pcurve[2]) + pcurve[0])));

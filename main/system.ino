@@ -98,5 +98,5 @@ void loop() {
   {
     Serial.println("No motion");
   }
-    delay(1000);
+    delay(100);
 }

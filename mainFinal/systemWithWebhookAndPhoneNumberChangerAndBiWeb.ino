@@ -54,8 +54,19 @@ void setup()
 //    setMotionOn(); // ONLY FOR TESTING, DELETE WHEN APP IMPLEMENTED
 }
 
+void setupagain()
+{
+    // Subscribe to the integration response event:
+    Particle.subscribe("hook-response/Motion Detected", myHandler, MY_DEVICES);
+
+    Particle.function("test", prnToScr);
+    Serial.begin(115200); //set serial baud rate for console
+    Particle.function("setMotion", setMotion); //enables the Android app and Particle Console to turn the motion sensor off or on
+}
+
 void loop()
 {
+  setupagain();
   if(setMotionSMS == 0)
   {
     Serial.println("Sending disarmed SMS...");
@@ -277,18 +288,21 @@ void printGasValues(float r0Value) {
   Serial.println("======");
   Serial.print("Air Purity (R0) [higher # = cleaner air]: ");
   Serial.println(r0Value);
-  Particle.publish("Gas Sensor Readings", r0Value, PRIVATE);
+//  Particle.publish("Gas Sensor Readings", r0Value, PRIVATE);
   Serial.print("Liquified Petroleum Gas (LPG): ");
   Serial.print(getGasPercentage(MQRead()/r0Value, LPG_GAS) );
-  Particle.publish("Gas Sensor Readings", LPG_GAS, PRIVATE);
+  int LPG_GASVALUE = getGasPercentage(MQRead()/r0Value, LPG_GAS);
+//  Particle.publish("Gas Sensor Readings", LPG_GASVALUE, PRIVATE);
   Serial.println( " ppm" );
   Serial.print("Carbon Monoxide (CO): ");
   Serial.print(getGasPercentage(MQRead()/r0Value, CO_GAS) );
-  Particle.publish("Gas Sensor Readings", CO_GAS, PRIVATE);
+  int CO_GASVALUE = getGasPercentage(MQRead()/r0Value, CO_GAS);
+//  Particle.publish("Gas Sensor Readings", CO_GASVALUE, PRIVATE);
   Serial.println( " ppm" );
   Serial.print("SMOKE: ");
   Serial.print(getGasPercentage(MQRead()/r0Value, SMOKE_GAS) );
-  Particle.publish("Gas Sensor Readings", data, PRIVATE);
+  int SMOKE_GASVALUE = getGasPercentage(MQRead()/r0Value, SMOKE_GAS);
+//  Particle.publish("Gas Sensor Readings", SMOKE_GASVALUE, PRIVATE);
   Serial.println( " ppm" );
   Serial.println();
 //  delay(200);

@@ -16,9 +16,79 @@ int lowerLimit = 10;
 boolean smsSend = false;
 
 int prnToScr(String command);
-
 int setMotion(String command);  //for the "call function "
 int setMotionSMS = -1;
+
+STARTUP(cellular_credentials_set("isp.telus.com", "", "", NULL)); //required fer Telus SIM cards
+
+void setup()
+{
+    // Subscribe to the integration response event:
+    Particle.subscribe("hook-response/Motion Detected", myHandler, MY_DEVICES);
+
+    Particle.function("test", prnToScr);
+    Serial.begin(115200); //set serial baud rate for console
+    Particle.function("setMotion", setMotion); //enables the Android app and Particle Console to turn the motion sensor off or on
+    setMotionOff();
+//    setMotionOn(); // ONLY FOR TESTING, DELETE WHEN APP IMPLEMENTED
+}
+
+void loop()
+{
+
+  if(setMotionSMS == 0)
+  {
+    Serial.println("Sending disarmed SMS...");
+    char szMotionOffMessage[64] = "Motion disarmed."; //sets the message to be sent through sms
+    sendMessage(szMotionOffMessage);  //sends the sms text to the original number
+    numberChanger("16044010082"); //calls the number changer function to change the phone number to this new number
+    sendMessage(szMotionOffMessage);  //sends the sms text to the new number
+    numberChanger("14038001118"); //calls the number changer function to change the phone number back to the number
+    setMotionSMS = -1;
+  }
+  else if(setMotionSMS == 1)
+  {
+    Serial.println("Sending ARMED SMS...");
+    char szMotionOnMessage[64] = "Motion ARMED!"; //sets the message to be sent through sms
+    sendMessage(szMotionOnMessage);  //sends the sms text to the original number
+    numberChanger("16044010082"); //calls the number changer function to change the phone number to this new number
+    sendMessage(szMotionOnMessage);  //sends the sms text to the new number
+    numberChanger("14038001118"); //calls the number changer function to change the phone number back to the number
+    setMotionSMS = -1;
+  }
+  else
+  {
+    setMotionSMS = -1;
+  }
+
+  if (digitalRead(readPin) == HIGH) //if the pin is triggered by the motion sensor...
+  {
+    Serial.println("MOTION DETECTED"); //print message to screen (using Putty on Serial Port 9 at 115200)
+    Serial.println();
+
+    // Get some data:
+    String data = String(10);
+    // Trigger the integration onto the web through ThingSpeak:
+    Particle.publish("Motion Detected", data, PRIVATE);
+
+    char szMessage[64] = "Motion Detected!"; //sets the message to be sent to the customer
+    sendMessage(szMessage); // sends message to the cell phone number on file
+
+//    Serial.println(Time.format(TIME_FORMAT_ISO8601_FULL));
+
+    delay(5000); //delay needed so that the Particle.io account deos not get "spammed" by this firmware. Can be set lower if customer needs more datapoints, but custower should then contact Particle Cloud to inform them of the higher rate requirement on their account.
+  }
+  else
+  {
+    Serial.println("No motion");  //print message to screen (using Putty on Serial Port 9 at 115200)
+  }
+    delay(1000);
+
+    R0 = MQCalibration();
+    printGasValues(R0);
+
+
+}
 
 int callback(int type, const char* buf, int len, char* param)
 {
@@ -125,73 +195,80 @@ void setMotionOff() //turns the motion sensor off
     digitalWrite(readPin, LOW);
 }
 
-STARTUP(cellular_credentials_set("isp.telus.com", "", "", NULL)); //required fer Telus SIM cards
-
-void setup()
-{
-    // Subscribe to the integration response event:
-    Particle.subscribe("hook-response/Motion Detected", myHandler, MY_DEVICES);
-
-    Particle.function("test", prnToScr);
-    Serial.begin(115200); //set serial baud rate for console
-    Particle.function("setMotion", setMotion); //enables the Android app and Particle Console to turn the motion sensor off or on
-    setMotionOff();
-//    setMotionOn(); // ONLY FOR TESTING, DELETE WHEN APP IMPLEMENTED
-}
-
 void myHandler(const char *event, const char *data)
 {
   // Handle the integration response
 }
 
-void loop()
+// calibrates the sensor by using the normal air quality value
+float MQCalibration()
 {
+    int i;
+    float calibration = 0;
+    for (i = 0; i < READ_TIMES; i++)
+    {
+      calibration += MQResistanceCalculation(analogRead(A0));
+      delay(CALIBRATION_INTERVAL);
+    }
+    calibration = calibration/CALIBRATION_TIMES;
+    calibration = calibration/R0_CLEAN_AIR_FACTOR;
+    return calibration;
+}
 
-  if(setMotionSMS == 0)
-  {
-    Serial.println("Sending disarmed SMS...");
-    char szMotionOffMessage[64] = "Motion disarmed."; //sets the message to be sent through sms
-    sendMessage(szMotionOffMessage);  //sends the sms text to the original number
-    numberChanger("16044010082"); //calls the number changer function to change the phone number to this new number
-    sendMessage(szMotionOffMessage);  //sends the sms text to the new number
-    numberChanger("14038001118"); //calls the number changer function to change the phone number back to the number
-    setMotionSMS = -1;
-  }
-  else if(setMotionSMS == 1)
-  {
-    Serial.println("Sending ARMED SMS...");
-    char szMotionOnMessage[64] = "Motion ARMED!"; //sets the message to be sent through sms
-    sendMessage(szMotionOnMessage);  //sends the sms text to the original number
-    numberChanger("16044010082"); //calls the number changer function to change the phone number to this new number
-    sendMessage(szMotionOnMessage);  //sends the sms text to the new number
-    numberChanger("14038001118"); //calls the number changer function to change the phone number back to the number
-    setMotionSMS = -1;
-  }
-  else
-  {
-    setMotionSMS = -1;
-  }
+// reads from the sensor to get gas value
+float MQRead()
+{
+    int i;
+    float rs = 0;
 
-  if (digitalRead(readPin) == HIGH) //if the pin is triggered by the motion sensor...
-  {
-    Serial.println("MOTION DETECTED"); //print message to screen (using Putty on Serial Port 9 at 115200)
-    Serial.println();
+    for (i = 0; i < READ_TIMES; i++) {
+      rs += MQResistanceCalculation(analogRead(A0));
+      delay(READ_INTERVAL);
+    }
+    rs = rs/READ_TIMES;
+    return rs;
+}
 
-    // Get some data:
-    String data = String(10);
-    // Trigger the integration onto the web through ThingSpeak:
-    Particle.publish("Motion Detected", data, PRIVATE);
+// calculates the sensor resistance
+float MQResistanceCalculation(int adc) {
+    return ( ((float)RL_VALUE*(1023-adc)/adc));
+}
 
-    char szMessage[64] = "Motion Detected!"; //sets the message to be sent to the customer
-    sendMessage(szMessage); // sends message to the cell phone number on file
 
-//    Serial.println(Time.format(TIME_FORMAT_ISO8601_FULL));
+int getGasPercentage(float rs_ro_ratio, int gas_id)
+{
+    if (gas_id == LPG_GAS) {
+      return MQGetPercentage(rs_ro_ratio,LPGCurve);
+    }
+    else if (gas_id == CO_GAS) {
+      return MQGetPercentage(rs_ro_ratio,COCurve);
+    }
+    else if (gas_id == SMOKE_GAS) {
+      return MQGetPercentage(rs_ro_ratio,SmokeCurve);
+    }
+    return 1;                 // the 1 is just to see if this effects anything
+}
 
-    delay(5000); //delay needed so that the Particle.io account deos not get "spammed" by this firmware. Can be set lower if customer needs more datapoints, but custower should then contact Particle Cloud to inform them of the higher rate requirement on their account.
-  }
-  else
-  {
-    Serial.println("No motion");  //print message to screen (using Putty on Serial Port 9 at 115200)
-  }
-    delay(1000);
+
+int MQGetPercentage(float rs_ro_ratio, float *pcurve)
+{
+    return (pow(10,( ((log(rs_ro_ratio)-pcurve[1])/pcurve[2]) + pcurve[0])));
+}
+
+void printGasValues(float r0Value) {
+  Serial.println("UPDATE");
+  Serial.println("======");
+  Serial.print("Air Purity (R0) [higher # = cleaner air]: ");
+  Serial.println(r0Value);
+  Serial.print("Liquified Petroleum Gas (LPG): ");
+  Serial.print(getGasPercentage(MQRead()/r0Value, LPG_GAS) );
+  Serial.println( " ppm" );
+  Serial.print("Carbon Monoxide (CO): ");
+  Serial.print(getGasPercentage(MQRead()/r0Value, CO_GAS) );
+  Serial.println( " ppm" );
+  Serial.print("SMOKE: ");
+  Serial.print(getGasPercentage(MQRead()/r0Value, SMOKE_GAS) );
+  Serial.println( " ppm" );
+  Serial.println();
+  delay(200);
 }

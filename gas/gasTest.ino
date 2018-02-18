@@ -29,9 +29,20 @@ void setup() {
 
     Serial.println("Calibrating");
 
+    R0 = MQCalibration();
+
+    Serial.print("calibration done RO =")
+    Serial.print(RO);
+
 }
 
 void loop() {
+
+    R0 = MQCalibration();
+
+    Serial.print("calibration done RO =")
+    Serial.print(RO);
+    
     Serial.print("LPG:");
     Serial.print(getGasPercentage(MQRead()/R0, LPG_GAS) );
     Serial.print( "ppm" );

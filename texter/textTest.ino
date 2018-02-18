@@ -1,7 +1,8 @@
+#include "cellular_hal.h"
+
 #define MAX_PHONE_NUMBER 14
 #define CTRL_Z 0x1A
 #define TIMEOUT 10000
-#include "cellular_hal.h"
 
 unsigned char id;
 boolean gain;     // Gain setting, 0 = X1, 1 = X16;

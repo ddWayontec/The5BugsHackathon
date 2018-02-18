@@ -76,7 +76,7 @@ int setMotion(String command)
   }
   else if(command == "Arm")
   {
-    setMotionOff();
+    setMotionOn();
     Serial.println("Motion ARMED!");
     char szMotionOnMessage[64] = "Motion ARMED!";
     sendMessage(szMotionOnMessage);

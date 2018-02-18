@@ -103,6 +103,10 @@ int setMotion(String command) //function for the received POST from the Android 
   }
 }
 
+int printToScreen() {
+    Serial.println("called func successfully");
+}
+
 void setMotionOn()  //turns the motion sensor on
 {
     pinMode(readPin,INPUT);
@@ -134,29 +138,8 @@ void myHandler(const char *event, const char *data)
   // Handle the integration response
 }
 
-void printGasValues(float R0Value) {
-  Serial.println("UPDATE");
-  Serial.println("======");
-  Serial.print("Air Purity (R0) [higher # = cleaner air]: ");
-  Serial.println(R0Value);
-  Serial.print("Liquified Petroleum Gas (LPG): ");
-  Serial.print(getGasPercentage(MQRead()/R0Value, LPG_GAS) );
-  Serial.println( " ppm" );
-  Serial.print("Carbon Monoxide (CO): ");
-  Serial.print(getGasPercentage(MQRead()/R0Value, CO_GAS) );
-  Serial.println( " ppm" );
-  Serial.print("SMOKE: ");
-  Serial.print(getGasPercentage(MQRead()/R0Value, SMOKE_GAS) );
-  Serial.println( " ppm" );
-  Serial.println();
-  delay(200);
-}
-
 void loop()
 {
-
-    Serial.println(getPhoneNumber());
-    numberChanger("16044010082");
 
   if(setMotionSMS == 0)
   {
@@ -205,7 +188,4 @@ void loop()
     Serial.println("No motion");  //print message to screen (using Putty on Serial Port 9 at 115200)
   }
     delay(1000);
-
-  R0 = MQCalibration();
-  printGasValues(R0);
 }

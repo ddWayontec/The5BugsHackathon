@@ -8,7 +8,7 @@ boolean gain;     // Gain setting, 0 = X1, 1 = X16;
 unsigned int ms;  // Integration ("shutter") time in milliseconds
 unsigned int data1;
 unsigned int data2;
-int readPin = D7;
+volatile int readPin = D7;
 
 char szPhoneNumber[MAX_PHONE_NUMBER] = "14037972786";
 
@@ -109,8 +109,8 @@ void setup()
     Particle.subscribe("hook-response/Motion Detected", myHandler, MY_DEVICES);
 
     Serial.begin(115200);
-    Particle.function("setmin", setLowerLimit);
     Particle.function("setMotion", setMotion);
+//    Particle.function("setMotion", setMotionOn);
     setMotionOff();
     setMotionOn(); // ONLY FOR TESTING, DELETE WHEN APP IMPLEMENTED
 }

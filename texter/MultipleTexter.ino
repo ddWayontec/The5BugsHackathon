@@ -1,6 +1,6 @@
 #include "cellular_hal.h"
 
-#define MAX_PHONE_NUMBER 14
+//#define MAX_PHONE_NUMBER 14
 #define CTRL_Z 0x1A
 #define TIMEOUT 10000
 
@@ -10,6 +10,7 @@ unsigned int ms;  // Integration ("shutter") time in milliseconds
 unsigned int data1;
 unsigned int data2;
 char szPhoneNumber[MAX_PHONE_NUMBER] = "14037972786";
+char szPhoneNumber = "14037972786";
 
 int lowerLimit = 10;
 boolean smsSend = false;

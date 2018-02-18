@@ -8,10 +8,10 @@ boolean gain;     // Gain setting, 0 = X1, 1 = X16;
 unsigned int ms;  // Integration ("shutter") time in milliseconds
 unsigned int data1;
 unsigned int data2;
+int readPin = D7;
 
-char szPhoneNumber1[MAX_PHONE_NUMBER1] = "14037972786";
-char szPhoneNumber2[MAX_PHONE_NUMBER2] = "16044010082";
-
+char szPhoneNumber[MAX_PHONE_NUMBER] = "14037972786";
+\
 int lowerLimit = 10;
 boolean smsSend = false;
 
@@ -35,8 +35,7 @@ int sendMessage(char* pMessage)
 {
     char szCmd[64];
 
-    sprintf(szCmd, "AT+CMGS=\"+%s\",145\r\n", szPhoneNumber1);
-    sprintf(szCmd, "AT+CMGS=\"+%s\",145\r\n", szPhoneNumber2);
+    sprintf(szCmd, "AT+CMGS=\"+%s\",145\r\n", szPhoneNumber);
 
     Serial.print("Sending command ");
     Serial.print(szCmd);
@@ -77,23 +76,25 @@ STARTUP(cellular_credentials_set("isp.telus.com", "", "", NULL));
 void setup()
 {
     Serial.begin(115200);
-    Spark.function("setmin", setLowerLimit);
+    Particle.function("setmin", setLowerLimit);
     setMotionOff();
 }
 
 void loop() {
 
-  if (digitalRead(readPin) == HIGH) {
+  if (digitalRead(readPin) == HIGH)
+  {
       char szMessage[64] = "Particle Electron Detected Motion!";
 
+
+    Serial.println();
+    Serial.println();
+
+	  sendMessage(szMessage);
   }
-    Serial.println();
-    Serial.println();
+  else
+  {
 
-
-
-
-	sendMessage(szMessage);
-
+  }
     delay(10000);
 }

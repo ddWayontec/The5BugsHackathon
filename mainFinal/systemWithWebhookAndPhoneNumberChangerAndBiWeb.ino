@@ -105,6 +105,7 @@ int setMotion(String command) //function for the received POST from the Android 
 
 int printToScreen() {
     Serial.println("called func successfully");
+    return 1;
 }
 
 void setMotionOn()  //turns the motion sensor on
@@ -127,6 +128,7 @@ void setup()
     // Subscribe to the integration response event:
     Particle.subscribe("hook-response/Motion Detected", myHandler, MY_DEVICES);
 
+        Particle.function("test", printToScreen);
     Serial.begin(115200); //set serial baud rate for console
     Particle.function("setMotion", setMotion); //enables the Android app and Particle Console to turn the motion sensor off or on
     setMotionOff();

@@ -296,22 +296,21 @@ void printGasValues(float r0Value) {
   Serial.println("======");
   Serial.print("Air Purity (R0) [higher # = cleaner air]: ");
   Serial.println(r0Value);
-//  Particle.publish("Gas Sensor Readings", r0Value, PRIVATE);
+//  Particle.publish("Gas Sensor Readings", r0Value, PRIVATE);  //for gas sensor webhook
   Serial.print("Liquified Petroleum Gas (LPG): ");
   Serial.print(getGasPercentage(MQRead()/r0Value, LPG_GAS) );
   int LPG_GASVALUE = getGasPercentage(MQRead()/r0Value, LPG_GAS);
-//  Particle.publish("Gas Sensor Readings", LPG_GASVALUE, PRIVATE);
+//  Particle.publish("Gas Sensor Readings", LPG_GASVALUE, PRIVATE);  //for gas sensor webhook
   Serial.println( " ppm" );
   Serial.print("Carbon Monoxide (CO): ");
   Serial.print(getGasPercentage(MQRead()/r0Value, CO_GAS) );
   int CO_GASVALUE = getGasPercentage(MQRead()/r0Value, CO_GAS);
-//  Particle.publish("Gas Sensor Readings", CO_GASVALUE, PRIVATE);
+//  Particle.publish("Gas Sensor Readings", CO_GASVALUE, PRIVATE);  //for gas sensor webhook
   Serial.println( " ppm" );
   Serial.print("SMOKE: ");
   Serial.print(getGasPercentage(MQRead()/r0Value, SMOKE_GAS) );
   int SMOKE_GASVALUE = getGasPercentage(MQRead()/r0Value, SMOKE_GAS);
-//  Particle.publish("Gas Sensor Readings", SMOKE_GASVALUE, PRIVATE);
+//  Particle.publish("Gas Sensor Readings", SMOKE_GASVALUE, PRIVATE);  //for gas sensor webhook
   Serial.println( " ppm" );
   Serial.println();
-//  delay(200);
 }

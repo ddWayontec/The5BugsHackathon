@@ -10,12 +10,12 @@ unsigned int data1;
 unsigned int data2;
 volatile int readPin = D7;
 
-char szPhoneNumber[MAX_PHONE_NUMBER] = "14038001118";
+char szPhoneNumber[MAX_PHONE_NUMBER] = "14038001118"; //default phone number that will be used for SMS texts
 
 int lowerLimit = 10;
 boolean smsSend = false;
 
-int setMotion(String command);
+int setMotion(String command);  //for the "call function "
 
 int callback(int type, const char* buf, int len, char* param)
 {
@@ -75,7 +75,7 @@ int sendMessage(char* pMessage) //for sending sms text message to cell phone
     return retVal;
 }
 
-int setMotion(String command)
+int setMotion(String command) //function for the received POST from the Android App or Particle Cloud function call module
 {
   if(command == "Disarm") //if Disarm "message" is received from the Android App or Particle Cloud function call module
   {

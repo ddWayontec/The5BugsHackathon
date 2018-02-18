@@ -14,7 +14,8 @@ char szPhoneNumber[MAX_PHONE_NUMBER] = "14037972786";
 int lowerLimit = 10;
 boolean smsSend = false;
 
-int callback(int type, const char* buf, int len, char* param){
+int callback(int type, const char* buf, int len, char* param)
+{
     Serial.print("Return: ");
     Serial.write((const uint8_t*)buf, len);
     Serial.println();
@@ -22,13 +23,15 @@ int callback(int type, const char* buf, int len, char* param){
     return WAIT;
 }
 
-int setLowerLimit(String args){
+int setLowerLimit(String args)
+{
     lowerLimit = args.toInt();
 
     return lowerLimit;
 }
 
-int sendMessage(char* pMessage){
+int sendMessage(char* pMessage)
+{
     char szCmd[64];
 
     sprintf(szCmd, "AT+CMGS=\"+%s\",145\r\n", szPhoneNumber);
@@ -47,10 +50,12 @@ int sendMessage(char* pMessage){
 
     int retVal = Cellular.command(callback, szReturn, TIMEOUT, szCmd);
 
-    if(RESP_OK == retVal){
+    if(RESP_OK == retVal)
+    {
         Serial.println("+OK, Message Send");
     }
-    else{
+    else
+    {
         Serial.println("+ERROR, error sending message");
     }
 
@@ -59,18 +64,18 @@ int sendMessage(char* pMessage){
 
 STARTUP(cellular_credentials_set("isp.telus.com", "", "", NULL));
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
     Spark.function("setmin", setLowerLimit);
 }
 
-void loop() {
-
+void loop()
+{
     Serial.println();
     Serial.println();
 
     char szMessage[64] = "Particle Electron Test Message!";
-
 
     sendMessage(szMessage);
 

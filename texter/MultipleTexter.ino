@@ -1,6 +1,6 @@
 #include "cellular_hal.h"
 
-#define MAX_PHONE_NUMBER 14
+//#define MAX_PHONE_NUMBER 14
 #define CTRL_Z 0x1A
 #define TIMEOUT 10000
 
@@ -9,7 +9,8 @@ boolean gain;     // Gain setting, 0 = X1, 1 = X16;
 unsigned int ms;  // Integration ("shutter") time in milliseconds
 unsigned int data1;
 unsigned int data2;
-char szPhoneNumber[MAX_PHONE_NUMBER] = "14037972786";
+//char szPhoneNumber[MAX_PHONE_NUMBER] = "14037972786";
+int szPhoneNumber = 14037972786;
 
 int lowerLimit = 10;
 boolean smsSend = false;
@@ -75,7 +76,7 @@ void loop()
     Serial.println();
     Serial.println();
 
-    char szMessage[64] = "Particle Electron Test Message!";
+    char szMessage[64] = "Particle Electron Test Message 2";
 
     sendMessage(szMessage);
 

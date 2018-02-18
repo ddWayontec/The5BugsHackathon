@@ -137,7 +137,7 @@ void myHandler(const char *event, const char *data)
 void loop()
 {
 
-    Serial.println(szPhoneNumber);
+    Serial.println(getPhoneNumber());
 
   if(setMotionSMS == 0)
   {

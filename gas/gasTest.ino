@@ -27,4 +27,8 @@ void loop() {
 
     Cellular.off();
     delay(120000);
+
+    Cellular.on();
+    delay(300000);
+
 }

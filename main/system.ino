@@ -102,12 +102,15 @@ void loop()
     String data = String(10);
     // Trigger the integration
     Particle.publish("Motion Detected", data, PRIVATE);
-    delay(30000);
+
+    char szMessage[64] = "Motion Detected!";
+    sendMessage(szMessage);
+    delay(15000);
   }
   else
   {
     //  sendMessage(szMessage);
     Serial.println("No motion");
   }
-    delay(100);
+    delay(1000);
 }

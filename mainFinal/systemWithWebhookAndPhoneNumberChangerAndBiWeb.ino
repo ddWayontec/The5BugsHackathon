@@ -313,4 +313,18 @@ void printGasValues(float r0Value) {
 //  Particle.publish("Gas Sensor Readings", SMOKE_GASVALUE, PRIVATE);  //for gas sensor webhook
   Serial.println( " ppm" );
   Serial.println();
+
+  if (LPG_GASVALUE > 5) {
+    char szMessage[64] = "Liquified Petroleum Gas detected"; //sets the message to be sent to the customer
+    sendMessage(szMessage); // sends message to the cell phone number on file
+  }
+  else if (CO_GASVALUE > 0) {
+    char szMessage[64] = "Carbon Monoxide Gas detected"; //sets the message to be sent to the customer
+    sendMessage(szMessage); // sends message to the cell phone number on file
+  }
+  else if (SMOKE_GASVALUE > 0) {
+    char szMessage[64] = "Smoke detected"; //sets the message to be sent to the customer
+    sendMessage(szMessage); // sends message to the cell phone number on file
+  }
+
 }

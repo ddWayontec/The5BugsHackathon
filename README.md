@@ -1,2 +1,1 @@
-# The 5 Bugs
-# Hackathon Project
+# The 5 Bugs - Hackathon Project

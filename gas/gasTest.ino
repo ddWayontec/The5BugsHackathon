@@ -24,56 +24,60 @@ float SmokeCurve[3] = {2.3, 0.53, -0.44};
 
 float R0 = 10;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
+
+    delay(5000);
 
     Serial.println("Calibrating");
 
     R0 = MQCalibration();
 
-    Serial.print("calibration done RO =")
-    Serial.print(RO);
-
+    Serial.println("Main calibration:");
+    Serial.print("RO = ");
+    Serial.println(R0);
+    Serial.println("Main calibration done!");
 }
 
-void loop() {
-
+void loop()
+{
     R0 = MQCalibration();
-
-    Serial.print("calibration done RO =")
-    Serial.print(RO);
-
-    Serial.print("LPG:");
+    Serial.println("UPDATE");
+    Serial.println("======");
+    Serial.print("Air Purity (R0) [smaller # = cleaner air]: ");
+    Serial.println(R0);
+    Serial.print("Liquified Petroleum Gas (LPG): ");
     Serial.print(getGasPercentage(MQRead()/R0, LPG_GAS) );
-    Serial.println( "ppm" );
-    Serial.print("CO:");
+    Serial.println( " ppm" );
+    Serial.print("Carbon Monoxide (CO): ");
     Serial.print(getGasPercentage(MQRead()/R0, CO_GAS) );
-    Serial.println( "ppm" );
-    Serial.print("SMOKE:");
+    Serial.println( " ppm" );
+    Serial.print("SMOKE: ");
     Serial.print(getGasPercentage(MQRead()/R0, SMOKE_GAS) );
-    Serial.println( "ppm" );
-    delay(300);
-
-
+    Serial.println( " ppm" );
+    Serial.println();
+    delay(200);
 }
 
 // calibrates the sensor by using the normal air quality value
-float MQCalibration() {
+float MQCalibration()
+{
     int i;
     float calibration = 0;
-
-    for (i = 0; i < READ_TIMES; i++) {
+    for (i = 0; i < READ_TIMES; i++)
+    {
       calibration += MQResistanceCalculation(analogRead(A0));
       delay(CALIBRATION_INTERVAL);
     }
     calibration = calibration/CALIBRATION_TIMES;
     calibration = calibration/R0_CLEAN_AIR_FACTOR;
-
     return calibration;
 }
 
 // reads from the sensor to get gas value
-float MQRead() {
+float MQRead()
+{
     int i;
     float rs = 0;
 
@@ -82,7 +86,6 @@ float MQRead() {
       delay(READ_INTERVAL);
     }
     rs = rs/READ_TIMES;
-
     return rs;
 }
 
@@ -92,7 +95,8 @@ float MQResistanceCalculation(int adc) {
 }
 
 
-int getGasPercentage(float rs_ro_ratio, int gas_id) {
+int getGasPercentage(float rs_ro_ratio, int gas_id)
+{
     if (gas_id == LPG_GAS) {
       return MQGetPercentage(rs_ro_ratio,LPGCurve);
     }
@@ -102,11 +106,11 @@ int getGasPercentage(float rs_ro_ratio, int gas_id) {
     else if (gas_id == SMOKE_GAS) {
       return MQGetPercentage(rs_ro_ratio,SmokeCurve);
     }
-
     return 0;
 }
 
 
-int MQGetPercentage(float rs_ro_ratio, float *pcurve) {
+int MQGetPercentage(float rs_ro_ratio, float *pcurve)
+{
     return (pow(10,( ((log(rs_ro_ratio)-pcurve[1])/pcurve[2]) + pcurve[0])));
 }

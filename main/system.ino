@@ -11,7 +11,7 @@ unsigned int data2;
 int readPin = D7;
 
 char szPhoneNumber[MAX_PHONE_NUMBER] = "14037972786";
-\
+
 int lowerLimit = 10;
 boolean smsSend = false;
 
@@ -63,7 +63,7 @@ int sendMessage(char* pMessage)
 
 void setMotionOn() {
     pinMode(readPin,INPUT);
-    digitalRead(readPin, LOW);
+    digitalRead(readPin);
 }
 
 void setMotionOff() {

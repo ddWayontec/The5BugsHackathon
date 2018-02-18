@@ -73,5 +73,5 @@ void loop() {
 
 	sendMessage(szMessage);
 
-    delay(20000);
+    delay(50000);
 }

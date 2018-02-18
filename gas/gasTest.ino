@@ -106,7 +106,7 @@ int getGasPercentage(float rs_ro_ratio, int gas_id)
     else if (gas_id == SMOKE_GAS) {
       return MQGetPercentage(rs_ro_ratio,SmokeCurve);
     }
-    return 0;
+    return 1;                 // the 1 is just to see if this effects anything
 }
 
 

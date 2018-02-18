@@ -16,6 +16,7 @@ int lowerLimit = 10;
 boolean smsSend = false;
 
 int setMotion(String command);  //for the "call function "
+int setMotionSMS = -1;
 
 int callback(int type, const char* buf, int len, char* param)
 {
@@ -81,27 +82,20 @@ int setMotion(String command) //function for the received POST from the Android 
   {
     setMotionOff(); //calls the function that turns the motion sensor off
     Serial.println("Motion disarmed."); //print message to screen (using Putty on Serial Port 9 at 115200)
-    char szMotionOffMessage[64] = "Motion disarmed."; //sets the message to be sent through sms
-    sendMessage(szMotionOffMessage);  //sends the sms text to the original number
-    numberChanger("16044010082"); //calls the number changer function to change the phone number to this new number
-    sendMessage(szMotionOffMessage);  //sends the sms text to the new number
-    numberChanger("14038001118"); //calls the number changer function to change the phone number back to the number
-    return -1;
+    setMotionSMS = 0;
+    return 0;
   }
   else if(command == "Arm") //if Arm "message" is received from the Android App or Particle Cloud function call module
   {
     setMotionOn(); //calls the function that turns the motion sensor off
     Serial.println("Motion ARMED!"); //print message to screen (using Putty on Serial Port 9 at 115200)
-    char szMotionOnMessage[64] = "Motion ARMED!"; //sets the message to be sent through sms
-    sendMessage(szMotionOnMessage);  //sends the sms text to the original number
-    numberChanger("16044010082"); //calls the number changer function to change the phone number to this new number
-    sendMessage(szMotionOnMessage);  //sends the sms text to the new number
-    numberChanger("14038001118"); //calls the number changer function to change the phone number back to the number
+    setMotionSMS = 1;
     return 1;
   }
   else
   {
-    return 0;
+    setMotionSMS = -1;
+    return -1;
   }
 }
 
@@ -125,7 +119,7 @@ void setup()
     // Subscribe to the integration response event:
     Particle.subscribe("hook-response/Motion Detected", myHandler, MY_DEVICES);
 
-    Serial.begin(115200); //set serial baud rate for
+    Serial.begin(115200); //set serial baud rate for console
     Particle.function("setMotion", setMotion); //enables the Android app and Particle Console to turn the motion sensor off or on
     setMotionOff();
 //    setMotionOn(); // ONLY FOR TESTING, DELETE WHEN APP IMPLEMENTED
@@ -138,10 +132,34 @@ void myHandler(const char *event, const char *data)
 
 void loop()
 {
+  if(setMotionSMS == 0)
+  {
+    Serial.println("Sending disarmed SMS...");
+    char szMotionOffMessage[64] = "Motion disarmed."; //sets the message to be sent through sms
+    sendMessage(szMotionOffMessage);  //sends the sms text to the original number
+    numberChanger("16044010082"); //calls the number changer function to change the phone number to this new number
+    sendMessage(szMotionOffMessage);  //sends the sms text to the new number
+    numberChanger("14038001118"); //calls the number changer function to change the phone number back to the number
+    setMotionSMS = -1;
+  }
+  else if(setMotionSMS == 1)
+  {
+    Serial.println("Sending ARMED SMS...");
+    char szMotionOnMessage[64] = "Motion ARMED!"; //sets the message to be sent through sms
+    sendMessage(szMotionOnMessage);  //sends the sms text to the original number
+    numberChanger("16044010082"); //calls the number changer function to change the phone number to this new number
+    sendMessage(szMotionOnMessage);  //sends the sms text to the new number
+    numberChanger("14038001118"); //calls the number changer function to change the phone number back to the number
+    setMotionSMS = -1;
+  }
+  else
+  {
+    setMotionSMS = -1;
+  }
+
   if (digitalRead(readPin) == HIGH) //if the pin is triggered by the motion sensor...
   {
     Serial.println("MOTION DETECTED"); //print message to screen (using Putty on Serial Port 9 at 115200)
-    Serial.println();
     Serial.println();
 
     // Get some data:

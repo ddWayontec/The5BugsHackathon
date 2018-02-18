@@ -38,6 +38,7 @@ void setup()
     Serial.print("RO = ");
     Serial.println(R0);
     Serial.println("Main calibration done!");
+    Serial.println();
 }
 
 void loop()
@@ -45,7 +46,7 @@ void loop()
     R0 = MQCalibration();
     Serial.println("UPDATE");
     Serial.println("======");
-    Serial.print("Air Purity (R0) [smaller # = cleaner air]: ");
+    Serial.print("Air Purity (R0) [higher # = cleaner air]: ");
     Serial.println(R0);
     Serial.print("Liquified Petroleum Gas (LPG): ");
     Serial.print(getGasPercentage(MQRead()/R0, LPG_GAS) );

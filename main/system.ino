@@ -75,27 +75,38 @@ STARTUP(cellular_credentials_set("isp.telus.com", "", "", NULL));
 
 void setup()
 {
+    // Subscribe to the integration response event
+    Particle.subscribe("hook-response/Motion Detected", myHandler, MY_DEVICES);
+
     Serial.begin(115200);
     Particle.function("setmin", setLowerLimit);
     setMotionOff();
     setMotionOn(); // ONLY FOR TESTING, DELETE WHEN APP IMPLEMENTED
 }
 
-void loop() {
+void myHandler(const char *event, const char *data)
+{
+  // Handle the integration response
+}
 
+void loop()
+{
   if (digitalRead(readPin) == HIGH)
   {
-      //char szMessage[64] = "Particle Electron Detected Motion!";
-      Serial.println("MOTION DETECT");
-
-
+    //char szMessage[64] = "Particle Electron Detected Motion!";
+    Serial.println("MOTION DETECT");
     Serial.println();
     Serial.println();
 
-	//  sendMessage(szMessage);
+    // Get some data
+    String data = String(10);
+    // Trigger the integration
+    Particle.publish("Motion Detected", data, PRIVATE);
+    delay(30000);
   }
   else
   {
+    //  sendMessage(szMessage);
     Serial.println("No motion");
   }
     delay(100);

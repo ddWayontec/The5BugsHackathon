@@ -112,7 +112,7 @@ void setup()
     Particle.function("setMotion", setMotion);
 //    Particle.function("setMotion", setMotionOn);
     setMotionOff();
-    setMotionOn(); // ONLY FOR TESTING, DELETE WHEN APP IMPLEMENTED
+//    setMotionOn(); // ONLY FOR TESTING, DELETE WHEN APP IMPLEMENTED
 }
 
 void myHandler(const char *event, const char *data)

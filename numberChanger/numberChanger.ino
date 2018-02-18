@@ -62,10 +62,13 @@ int sendMessage(char* pMessage)
     return retVal;
 }
 
-void numberChanger(char arr)
+void numberChanger(String num)
 {
-    for (i = 0; i < sizeOf(arr); i++) {
-        szPhoneNumber[i] = arr[i];
+    char charBuf[MAX_PHONE_NUMBER];
+    num.toCharArray(charBuf, MAX_PHONE_NUMBER);
+
+    for (int i = 0; i < MAX_PHONE_NUMBER; i++) {
+        szPhoneNumber[i] = charBuf[i];
     }
 }
 
@@ -74,7 +77,7 @@ STARTUP(cellular_credentials_set("isp.telus.com", "", "", NULL));
 void setup()
 {
     Serial.begin(115200);
-    Spark.function("setmin", setLowerLimit);
+    Particle.function("setmin", setLowerLimit);
 }
 
 void loop()
@@ -84,7 +87,8 @@ void loop()
 
     char szMessage[64] = "Particle Electron Test Message!";
 
-    char szPhoneNumber[MAX_PHONE_NUMBER] = "16044010082";
+    numberChanger("16044010082");
+    //char szPhoneNumber[MAX_PHONE_NUMBER] = "16044010082";
 
     sendMessage(szMessage);
 

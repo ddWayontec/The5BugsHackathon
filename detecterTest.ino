@@ -3,10 +3,6 @@ void setup() {
 }
 
 void loop() {
-    Cellular.off();
-    delay(120000);
-
-
     float sensor_volt;
     float gas_ratio;
     float RS_air;
@@ -29,4 +25,6 @@ void loop() {
     Serial.println("R0 = ");
     Serial.print(RO);
 
+    Cellular.off();
+    delay(120000);
 }

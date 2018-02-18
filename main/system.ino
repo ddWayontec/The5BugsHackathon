@@ -15,6 +15,9 @@ char szPhoneNumber[MAX_PHONE_NUMBER] = "14037972786";
 int lowerLimit = 10;
 boolean smsSend = false;
 
+int setMotionOn(String command);
+int setMotionOff(String command);
+
 int callback(int type, const char* buf, int len, char* param)
 {
     Serial.print("Return: ");
@@ -61,12 +64,39 @@ int sendMessage(char* pMessage)
     return retVal;
 }
 
-void setMotionOn() {
-    pinMode(readPin,INPUT);
-    digitalRead(readPin);
+int setMotion(String command)
+{
+  if(command == "Disarm")
+  {
+    setMotionOff();
+    Serial.println("Motion disarmed.");
+    char szMotionOffMessage[64] = "Motion disarmed.";
+    sendMessage(szMotionOffMessage);
+    return -1;
+  }
+  else if(command == "Arm")
+  {
+    setMotionOff();
+    Serial.println("Motion ARMED!");
+    char szMotionOnMessage[64] = "Motion ARMED!";
+    sendMessage(szMotionOnMessage);
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
 }
 
-void setMotionOff() {
+void setMotionOn()
+{
+    pinMode(readPin,INPUT);
+    digitalRead(readPin);
+
+}
+
+void setMotionOff()
+{
     pinMode(readPin,OUTPUT);
     digitalWrite(readPin, LOW);
 }
@@ -80,6 +110,7 @@ void setup()
 
     Serial.begin(115200);
     Particle.function("setmin", setLowerLimit);
+    Particle.function("setMotion", setMotion);
     setMotionOff();
     setMotionOn(); // ONLY FOR TESTING, DELETE WHEN APP IMPLEMENTED
 }

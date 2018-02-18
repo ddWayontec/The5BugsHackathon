@@ -27,6 +27,10 @@ int callback(int type, const char* buf, int len, char* param)
     return WAIT;
 }
 
+char* getPhoneNumber() {
+    return szPhoneNumber;
+}
+
 int setLowerLimit(String args)
 {
     lowerLimit = args.toInt();
@@ -132,6 +136,9 @@ void myHandler(const char *event, const char *data)
 
 void loop()
 {
+
+    Serial.println(szPhoneNumber);
+
   if(setMotionSMS == 0)
   {
     Serial.println("Sending disarmed SMS...");

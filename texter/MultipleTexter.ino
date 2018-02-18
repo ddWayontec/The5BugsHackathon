@@ -49,10 +49,12 @@ int sendMessage(char* pMessage){
 
     int retVal = Cellular.command(callback, szReturn, TIMEOUT, szCmd);
 
-    if(RESP_OK == retVal){
+    if(RESP_OK == retVal)
+    {
         Serial.println("+OK, Message Send");
     }
-    else{
+    else
+    {
         Serial.println("+ERROR, error sending message");
     }
 
